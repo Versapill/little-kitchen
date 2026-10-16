@@ -276,6 +276,8 @@
   // The first message triggers a one-time activation email to this address.
   // Leave empty to only show the thank-you screen.
   const FEEDBACK_ENDPOINT = "https://formsubmit.co/ajax/ngmedia224@gmail.com";
+  // Extra recipients that get a copy of every message (comma-separated).
+  const FEEDBACK_CC = "bistro@little-kitchen.ro";
   // ────────────────────────────────────────────────────────────
 
   const T = {
@@ -434,6 +436,7 @@
       _subject: `Little Kitchen: recenzie ${rating}★`,
       _template: "table",
       _captcha: "false",
+      _cc: FEEDBACK_CC,
       Nota: `${rating} / 5`,
       Subiecte: selectedTopics().join(", ") || "-",
       Mesaj: msg.value.trim() || "-",
