@@ -272,9 +272,10 @@
 <script>
   // ── Settings ────────────────────────────────────────────────
   const GOOGLE_REVIEW_URL = "https://search.google.com/local/writereview?placeid=ChIJt055kcT_sUARpcxoub7NY6w";
-  // Where negative feedback is sent (e.g. a Formspree / Make / Zapier webhook URL).
+  // 1–3 star feedback is emailed here via FormSubmit (formsubmit.co).
+  // The first message triggers a one-time activation email to this address.
   // Leave empty to only show the thank-you screen.
-  const FEEDBACK_ENDPOINT = "";
+  const FEEDBACK_ENDPOINT = "https://formsubmit.co/ajax/ngmedia224@gmail.com";
   // ────────────────────────────────────────────────────────────
 
   const T = {
@@ -430,11 +431,14 @@
     sendBtn.disabled = true;
     sendText.textContent = T[lang].sending;
     const payload = {
-      rating,
-      language: lang,
-      topics: selectedTopics().join(", "),
-      message: msg.value.trim(),
-      date: new Date().toLocaleString("ro-RO"),
+      _subject: `Little Kitchen: recenzie ${rating}★`,
+      _template: "table",
+      _captcha: "false",
+      Nota: `${rating} / 5`,
+      Subiecte: selectedTopics().join(", ") || "-",
+      Mesaj: msg.value.trim() || "-",
+      Limba: lang.toUpperCase(),
+      Data: new Date().toLocaleString("ro-RO", { timeZone: "Europe/Bucharest" }),
     };
     if (FEEDBACK_ENDPOINT) {
       try {
