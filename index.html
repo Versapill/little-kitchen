@@ -1,0 +1,469 @@
+<!doctype html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Little Kitchen Bistro – Părerea ta</title>
+<meta name="description" content="Mulțumim că ne-ai vizitat! Spune-ne cum a fost experiența ta la Little Kitchen Bistro.">
+<meta name="theme-color" content="#ffffff">
+<link rel="icon" href="logo_home.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Italiana&family=Cormorant+Garamond:wght@300&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700&display=swap" rel="stylesheet">
+<style>
+  /* Palette & type taken from little-kitchen.ro */
+  :root {
+    --white: #ffffff;
+    --ink: #212121;
+    --text: #575757;
+    --muted: #8a8a8a;
+    --brown: #66332b;
+    --olive: #556b46;
+    --cream: #f4f1eb;
+    --line: #e6dfd2;
+    --display: "Italiana", "Didot", Georgia, serif;
+    --sans: "Satoshi", Arial, Helvetica, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { min-height: 100%; }
+  body {
+    font-family: var(--sans);
+    color: var(--text);
+    background: var(--white);
+    -webkit-tap-highlight-color: transparent;
+    overflow-x: hidden;
+  }
+
+  .page {
+    width: 100%; max-width: 480px; margin: 0 auto;
+    min-height: 100svh; display: flex; flex-direction: column;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  /* header */
+  header { position: relative; display: flex; justify-content: center; padding: 26px 16px 22px; }
+  header img { width: 64px; height: 64px; object-fit: contain; transform: scale(1.3); }
+
+  /* language switch, top-right corner */
+  .lang {
+    position: absolute; top: 18px; right: 16px;
+    display: flex; border: 1px solid var(--line);
+  }
+  .lang button {
+    appearance: none; border: 0; background: var(--white); cursor: pointer;
+    min-width: 40px; min-height: 34px; padding: 0 10px;
+    font: 500 12px var(--sans); letter-spacing: .08em; color: var(--muted);
+    transition: background .2s, color .2s;
+  }
+  .lang button[aria-pressed="true"] { background: var(--brown); color: var(--white); }
+  .lang button:focus-visible { outline: 1px solid var(--brown); outline-offset: 2px; }
+
+  /* hero photo with tagline, as on their homepage */
+  .hero {
+    position: relative; aspect-ratio: 16 / 10; overflow: hidden;
+    animation: fade .9s ease both;
+  }
+  .hero img {
+    width: 100%; height: 100%; object-fit: cover; object-position: 45% 50%; display: block;
+    animation: zoom 14s ease-out both;
+  }
+  .hero::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,.45), rgba(0,0,0,0) 60%);
+  }
+  .hero p {
+    position: absolute; z-index: 1; left: 22px; right: 22px; bottom: 18px;
+    font-family: var(--display); font-size: 21px; line-height: 1.2; color: var(--cream);
+    transition: opacity .25s ease;
+  }
+  .swap [data-i18n] { opacity: 0; }
+  [data-i18n] { transition: opacity .25s ease; }
+  @keyframes zoom { from { transform: scale(1.08); } }
+
+  main { flex: 1; padding: 34px 22px 0; }
+
+  /* views */
+  .view { display: none; }
+  .view.active { display: block; animation: fade .5s ease both; }
+  @keyframes fade { from { opacity: 0; transform: translateY(10px); } }
+
+  .num { font-family: "Cormorant Garamond", var(--display); font-weight: 300; font-variant-numeric: lining-nums; font-size: 68px; line-height: .9; color: var(--brown); }
+  .num.olive { color: var(--olive); }
+  h1 {
+    font-family: var(--display); font-weight: 400;
+    font-size: 34px; line-height: 1.15; color: var(--ink); margin-top: 8px;
+  }
+  .sub { margin-top: 14px; font-size: 15px; line-height: 1.75; color: var(--text); }
+  .sub strong { color: var(--ink); font-weight: 500; }
+
+  /* stars */
+  .stars { display: flex; gap: 4px; margin: 28px 0 8px -4px; }
+  .star {
+    appearance: none; border: 0; background: none; cursor: pointer;
+    width: 58px; height: 58px; padding: 6px;
+    transition: transform .15s ease;
+    touch-action: manipulation;
+  }
+  .star svg { width: 100%; height: 100%; overflow: visible; }
+  .star path {
+    fill: transparent; stroke: var(--brown); stroke-width: 1; stroke-linejoin: round;
+    transition: fill .2s ease;
+  }
+  .star.on path { fill: var(--brown); }
+  .star:active { transform: scale(.9); }
+  .star.pop { animation: pop .45s cubic-bezier(.3,1.6,.5,1); }
+  @keyframes pop { 40% { transform: scale(1.25) rotate(-6deg); } }
+  .star:focus-visible { outline: 1px solid var(--brown); outline-offset: 2px; }
+  .stars.hint .star { animation: wave 2.4s ease-in-out infinite; }
+  .stars.hint .star:nth-child(2) { animation-delay: .1s; }
+  .stars.hint .star:nth-child(3) { animation-delay: .2s; }
+  .stars.hint .star:nth-child(4) { animation-delay: .3s; }
+  .stars.hint .star:nth-child(5) { animation-delay: .4s; }
+  @keyframes wave { 0%, 60%, 100% { transform: none; } 30% { transform: translateY(-5px); } }
+
+  .label { min-height: 22px; font-size: 14px; font-weight: 500; color: var(--brown); }
+  .label:empty::before { content: attr(data-hint); color: var(--muted); font-weight: 400; }
+
+  .rule { border: 0; border-top: 1px solid var(--line); margin: 26px 0 0; }
+
+  footer {
+    padding: 22px 22px 26px; margin-top: 34px;
+    border-top: 1px solid #eee;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 12px; color: #bdbdbd;
+  }
+  footer img { width: 34px; height: 34px; object-fit: contain; transform: scale(1.3); }
+
+  /* outlined square button with arrow, like "Discover →" */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    min-height: 50px; padding: 0 24px;
+    border: 1px solid var(--brown); border-radius: 0; background: transparent; color: var(--brown);
+    font: 500 15px var(--sans); text-decoration: none; cursor: pointer;
+    transition: background .2s, color .2s, opacity .2s;
+  }
+  .btn svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.4; transition: transform .2s; }
+  .btn:not(:disabled):hover, .btn:not(:disabled):active { background: var(--brown); color: var(--white); }
+  .btn:not(:disabled):hover svg { transform: translateX(3px); }
+  .btn:disabled { opacity: .4; cursor: not-allowed; }
+  .btn.full { width: 100%; }
+  .link {
+    display: block; width: 100%; margin-top: 10px; min-height: 44px;
+    border: 0; background: none; cursor: pointer;
+    font: 400 14px var(--sans); color: var(--text);
+  }
+
+  /* bottom sheet for feedback */
+  .backdrop {
+    position: fixed; inset: 0; z-index: 10;
+    background: rgba(33,33,33,.4);
+    opacity: 0; pointer-events: none; transition: opacity .3s ease;
+  }
+  .sheet {
+    position: fixed; z-index: 11; left: 50%; bottom: 0;
+    width: 100%; max-width: 480px;
+    background: var(--white);
+    padding: 26px 22px calc(18px + env(safe-area-inset-bottom));
+    transform: translate(-50%, 105%);
+    transition: transform .45s cubic-bezier(.2,.9,.2,1);
+    max-height: 92svh; overflow-y: auto;
+  }
+  .open .backdrop { opacity: 1; pointer-events: auto; }
+  .open .sheet { transform: translate(-50%, 0); }
+  .sheet .num { font-size: 48px; }
+  .sheet h2 { font-family: var(--display); font-weight: 400; font-size: 28px; line-height: 1.15; color: var(--ink); margin-top: 6px; }
+  .sheet p { margin: 10px 0 20px; font-size: 14px; line-height: 1.7; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+  .chip {
+    border: 1px solid var(--line); background: var(--white); color: var(--ink);
+    border-radius: 0; padding: 9px 14px; font: 400 14px var(--sans); cursor: pointer;
+    transition: background .15s, border-color .15s, color .15s;
+  }
+  .chip[aria-pressed="true"] { background: var(--brown); border-color: var(--brown); color: var(--white); }
+
+  label.field { display: block; font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 8px; }
+  textarea {
+    width: 100%; min-height: 120px; resize: vertical;
+    border: 1px solid var(--line); border-radius: 0; background: var(--white);
+    padding: 14px 16px; font: 400 16px/1.5 var(--sans); color: var(--ink);
+    outline: none; transition: border-color .2s;
+  }
+  textarea::placeholder { color: #bdbdbd; }
+  textarea:focus { border-color: var(--brown); }
+  .row { margin-bottom: 18px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+  @media (max-width: 360px) {
+    .star { width: 52px; height: 52px; }
+    h1 { font-size: 30px; }
+  }
+  @media (min-width: 640px) {
+    .hero { aspect-ratio: 16 / 9; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <header>
+    <img src="logo_home.png" alt="Little Kitchen Bistro">
+    <div class="lang" role="group" aria-label="Limba / Language">
+      <button type="button" data-lang="ro" aria-pressed="true">RO</button>
+      <button type="button" data-lang="en" aria-pressed="false">EN</button>
+    </div>
+  </header>
+
+  <div class="hero">
+    <img src="hero.jpg" alt="">
+    <p data-i18n="tagline">unde mâncarea e simplă, caldă și merită să rămâi</p>
+  </div>
+
+  <main>
+    <!-- Step 1: rating -->
+    <section class="view active" id="rate">
+      <h1 data-i18n="rateTitle">Cum a fost experiența ta la noi?</h1>
+      <p class="sub" data-i18n="rateSub">Mulțumim că ne-ai vizitat. Atinge o stea, durează <strong>10 secunde</strong> și ne ajută mai mult decât crezi.</p>
+
+      <div class="stars hint" id="stars" role="radiogroup" aria-label="Notează experiența ta">
+        <button class="star" role="radio" aria-checked="false" data-v="1"></button>
+        <button class="star" role="radio" aria-checked="false" data-v="2"></button>
+        <button class="star" role="radio" aria-checked="false" data-v="3"></button>
+        <button class="star" role="radio" aria-checked="false" data-v="4"></button>
+        <button class="star" role="radio" aria-checked="false" data-v="5"></button>
+      </div>
+      <div class="label" id="label" aria-live="polite"></div>
+    </section>
+
+    <!-- Shown after feedback submitted -->
+    <section class="view" id="done">
+      <div class="num olive">02</div>
+      <h1 data-i18n="doneTitle">Mulțumim pentru sinceritate.</h1>
+      <p class="sub" data-i18n="doneSub">Am primit mesajul tău și îl citim cu atenție. Data viitoare facem totul mai bine, promitem.</p>
+      <hr class="rule">
+      <p class="sub" data-i18n="doneFoot">Te așteptăm înapoi la Little Kitchen.</p>
+    </section>
+  </main>
+
+  <footer>
+    <img src="logo_home.png" alt="">
+    <span>© 2026 Little Kitchen</span>
+  </footer>
+</div>
+
+<!-- Feedback sheet for 1–3 stars -->
+<div id="sheetRoot">
+  <div class="backdrop" id="backdrop"></div>
+  <form class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" novalidate>
+    <div class="num olive">02</div>
+    <h2 id="sheetTitle" data-i18n="sheetTitle">Ne pare rău că nu a fost perfect.</h2>
+    <p data-i18n="sheetSub">Spune-ne ce n-a mers bine și cum putem face experiența mai bună. Mesajul ajunge direct la noi, nu e public.</p>
+
+    <div class="chips" id="chips">
+      <button type="button" class="chip" aria-pressed="false" data-i18n="chipFood">Mâncarea</button>
+      <button type="button" class="chip" aria-pressed="false" data-i18n="chipDrinks">Băuturile</button>
+      <button type="button" class="chip" aria-pressed="false" data-i18n="chipService">Servirea</button>
+      <button type="button" class="chip" aria-pressed="false" data-i18n="chipWait">Timpul de așteptare</button>
+      <button type="button" class="chip" aria-pressed="false" data-i18n="chipClean">Curățenia</button>
+      <button type="button" class="chip" aria-pressed="false" data-i18n="chipPrice">Prețul</button>
+      <button type="button" class="chip" aria-pressed="false" data-i18n="chipVibe">Atmosfera</button>
+    </div>
+
+    <div class="row">
+      <label class="field" for="msg" data-i18n="msgLabel">Ce n-a mers bine?</label>
+      <textarea id="msg" name="message" placeholder="Scrie-ne liber, orice detaliu ne ajută…" required></textarea>
+    </div>
+
+    <button class="btn full" type="submit" id="sendBtn" disabled><span data-i18n="send">Trimite părerea</span><svg viewBox="0 0 24 24"><path d="M4 12h16M14 6l6 6-6 6"/></svg></button>
+    <button class="link" type="button" id="cancelBtn" data-i18n="back">Înapoi</button>
+  </form>
+</div>
+
+<script>
+  // ── Settings ────────────────────────────────────────────────
+  const GOOGLE_REVIEW_URL = "https://search.google.com/local/writereview?placeid=ChIJt055kcT_sUARpcxoub7NY6w";
+  // Where negative feedback is sent (e.g. a Formspree / Make / Zapier webhook URL).
+  // Leave empty to only show the thank-you screen.
+  const FEEDBACK_ENDPOINT = "";
+  // ────────────────────────────────────────────────────────────
+
+  const T = {
+    ro: {
+      docTitle: "Little Kitchen Bistro – Părerea ta",
+      tagline: "unde mâncarea e simplă, caldă și merită să rămâi",
+      rateTitle: "Cum a fost experiența ta la noi?",
+      rateSub: "Mulțumim că ne-ai vizitat. Atinge o stea, durează <strong>10 secunde</strong> și ne ajută mai mult decât crezi.",
+      tapHint: "Atinge o stea",
+      starsAria: "Notează experiența ta",
+      starAria: n => n === 1 ? "1 stea" : n + " stele",
+      labels: ["", "Dezamăgitor", "Se putea mai bine", "Așa și așa", "Foarte bine!", "Excepțional!"],
+      doneTitle: "Mulțumim pentru sinceritate.",
+      doneSub: "Am primit mesajul tău și îl citim cu atenție. Data viitoare facem totul mai bine, promitem.",
+      doneFoot: "Te așteptăm înapoi la Little Kitchen.",
+      sheetTitle: "Ne pare rău că nu a fost perfect.",
+      sheetSub: "Spune-ne ce n-a mers bine și cum putem face experiența mai bună. Mesajul ajunge direct la noi, nu e public.",
+      chipFood: "Mâncarea", chipDrinks: "Băuturile", chipService: "Servirea", chipWait: "Timpul de așteptare",
+      chipClean: "Curățenia", chipPrice: "Prețul", chipVibe: "Atmosfera",
+      msgLabel: "Ce n-a mers bine?",
+      msgPlaceholder: "Scrie-ne liber, orice detaliu ne ajută…",
+      send: "Trimite părerea",
+      sending: "Se trimite…",
+      back: "Înapoi",
+    },
+    en: {
+      docTitle: "Little Kitchen Bistro – Your feedback",
+      tagline: "where food feels simple, warm and worth staying for",
+      rateTitle: "How was your experience with us?",
+      rateSub: "Thank you for visiting. Tap a star, it takes <strong>10 seconds</strong> and helps us more than you think.",
+      tapHint: "Tap a star",
+      starsAria: "Rate your experience",
+      starAria: n => n === 1 ? "1 star" : n + " stars",
+      labels: ["", "Disappointing", "Could be better", "It was okay", "Very good!", "Outstanding!"],
+      doneTitle: "Thank you for your honesty.",
+      doneSub: "We got your message and we'll read it carefully. Next time we'll do better, we promise.",
+      doneFoot: "We hope to see you back at Little Kitchen.",
+      sheetTitle: "We're sorry it wasn't perfect.",
+      sheetSub: "Tell us what went wrong and how we can make your experience better. Your message comes straight to us and is never public.",
+      chipFood: "Food", chipDrinks: "Drinks", chipService: "Service", chipWait: "Waiting time",
+      chipClean: "Cleanliness", chipPrice: "Price", chipVibe: "Atmosphere",
+      msgLabel: "What went wrong?",
+      msgPlaceholder: "Write freely, every detail helps…",
+      send: "Send feedback",
+      sending: "Sending…",
+      back: "Back",
+    },
+  };
+
+  const starSVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 17.4l-5.8 3.1 1.1-6.5L2.6 9.4l6.5-.9z"/></svg>';
+
+  const starsEl = document.getElementById("stars");
+  const stars = [...starsEl.querySelectorAll(".star")];
+  const labelEl = document.getElementById("label");
+  const sheetRoot = document.getElementById("sheetRoot");
+  const sheet = document.getElementById("sheet");
+  const msg = document.getElementById("msg");
+  const sendBtn = document.getElementById("sendBtn");
+  const sendText = sendBtn.querySelector("span");
+  const langBtns = [...document.querySelectorAll(".lang button")];
+  let rating = 0;
+  let lang = "ro";
+
+  stars.forEach(s => (s.innerHTML = starSVG));
+
+  // ── Language ────────────────────────────────────────────────
+  function applyLang(l) {
+    lang = l;
+    const t = T[l];
+    document.documentElement.lang = l;
+    document.title = t.docTitle;
+    document.querySelectorAll("[data-i18n]").forEach(el => (el.innerHTML = t[el.dataset.i18n]));
+    msg.placeholder = t.msgPlaceholder;
+    starsEl.setAttribute("aria-label", t.starsAria);
+    stars.forEach((s, i) => s.setAttribute("aria-label", t.starAria(i + 1)));
+    labelEl.dataset.hint = t.tapHint;
+    paint(rating);
+    langBtns.forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === l)));
+    try { localStorage.setItem("lk-lang", l); } catch (e) {}
+  }
+  langBtns.forEach(b =>
+    b.addEventListener("click", () => {
+      if (b.dataset.lang === lang) return;
+      document.body.classList.add("swap");
+      setTimeout(() => { applyLang(b.dataset.lang); document.body.classList.remove("swap"); }, 250);
+    })
+  );
+  let saved = null;
+  try { saved = localStorage.getItem("lk-lang"); } catch (e) {}
+  applyLang(saved && T[saved] ? saved : "ro");
+
+  function paint(n) {
+    stars.forEach((s, i) => s.classList.toggle("on", i < n));
+    labelEl.textContent = T[lang].labels[n] || "";
+  }
+  function show(id) {
+    document.querySelectorAll(".view").forEach(v => v.classList.toggle("active", v.id === id));
+  }
+
+  stars.forEach((s, i) => {
+    s.addEventListener("mouseenter", () => paint(i + 1));
+    s.addEventListener("click", () => choose(i + 1));
+  });
+  starsEl.addEventListener("mouseleave", () => paint(rating));
+
+  function choose(n) {
+    rating = n;
+    starsEl.classList.remove("hint");
+    stars.forEach((s, i) => {
+      s.setAttribute("aria-checked", String(i + 1 === n));
+      s.classList.remove("pop");
+      if (i < n) { void s.offsetWidth; s.style.animationDelay = i * 60 + "ms"; s.classList.add("pop"); }
+    });
+    paint(n);
+    if (navigator.vibrate) navigator.vibrate(15);
+
+    if (n >= 4) {
+      window.location.href = GOOGLE_REVIEW_URL;
+    } else {
+      setTimeout(openSheet, 450);
+    }
+  }
+
+  function openSheet() {
+    sheetRoot.classList.add("open");
+    setTimeout(() => msg.focus({ preventScroll: true }), 400);
+  }
+  function closeSheet() {
+    sheetRoot.classList.remove("open");
+    rating = 0; paint(0);
+    stars.forEach(s => s.setAttribute("aria-checked", "false"));
+  }
+  document.getElementById("backdrop").addEventListener("click", closeSheet);
+  document.getElementById("cancelBtn").addEventListener("click", closeSheet);
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && sheetRoot.classList.contains("open")) closeSheet(); });
+
+  document.querySelectorAll(".chip").forEach(c =>
+    c.addEventListener("click", () => {
+      c.setAttribute("aria-pressed", c.getAttribute("aria-pressed") === "true" ? "false" : "true");
+      updateSend();
+    })
+  );
+  msg.addEventListener("input", updateSend);
+  function selectedTopics() {
+    return [...document.querySelectorAll('.chip[aria-pressed="true"]')].map(c => c.textContent.trim());
+  }
+  function updateSend() {
+    sendBtn.disabled = msg.value.trim().length < 3 && selectedTopics().length === 0;
+  }
+
+  sheet.addEventListener("submit", async e => {
+    e.preventDefault();
+    sendBtn.disabled = true;
+    sendText.textContent = T[lang].sending;
+    const payload = {
+      rating,
+      language: lang,
+      topics: selectedTopics().join(", "),
+      message: msg.value.trim(),
+      date: new Date().toLocaleString("ro-RO"),
+    };
+    if (FEEDBACK_ENDPOINT) {
+      try {
+        await fetch(FEEDBACK_ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify(payload),
+        });
+      } catch (err) { console.warn("Feedback send failed", err); }
+    } else {
+      console.info("Feedback (no endpoint configured):", payload);
+    }
+    sheetRoot.classList.remove("open");
+    show("done");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+</script>
+</body>
+</html>
